@@ -1,0 +1,16 @@
+---
+name: CustomItem 
+version: 1.0.0
+main: AmitxD\CustomItem\CustomItem
+api: 5.0.0
+src-namespace-prefix: AmitxD\CustomItem
+commands:
+  customitems:
+    description: open customItem UI
+    usage: "/customitems"
+    permission: CustomItem.command.customitems
+permissions:
+  CustomItem.command.customitems:
+    description: "Allows the user to run the customitems command"
+    default: op
+...
