@@ -6,7 +6,7 @@ namespace AmitxD\CustomItem\Manager;
 
 use AmitxD\CustomItem\Manager\CustomItemsManager;
 use pocketmine\player\Player;
-use OmniLibs\libs\jojoe77777\FormAPI\SimpleForm;
+use jojoe77777\FormAPI\SimpleForm;
 
 class FormManager {
 
