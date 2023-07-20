@@ -42,3 +42,13 @@ class CustomItem extends PluginBase {
         $this->callEvent("TeleportationSword");
         $this->callEvent("TimeController");
     }
+    /**
+     * Call a custom event dynamically based on the event name.
+     * @param string $eventName The name of the event to call.
+     */
+    private function callEvent(string $eventName): void {
+        $eventClass = "\\AmitxD\\CustomItem\\Events\\" . $eventName;
+        $eventListener = new $eventClass($this);
+        $this->getServer()->getPluginManager()->registerEvents($eventListener, $this);
+    }
+}
