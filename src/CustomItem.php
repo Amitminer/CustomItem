@@ -8,26 +8,46 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use AmitxD\CustomItem\Manager\FormManager;
+use AmitxD\CustomItem\Utils\Utils;
+use AmitxD\CustomItem\Utils\EnchantmentIds;
 
 class CustomItem extends PluginBase {
+    
+    protected static $instance;
 
     public function onLoad(): void {
+        self::$instance = $this;
         $this->getLogger()->info("§aEnabled CustomItem!");
     }
 
     public function onEnable(): void {
-       // $this->saveDefaultConfig();
+        // $this->saveDefaultConfig();
+        $this->registerEnchantments();
         $this->runEvents();
     }
 
+    public function registerEnchantments(): void {
+        $enchantments = ["Teleportation",
+            "Freezing",
+            "TimeStopper"];
+        $ids = [EnchantmentIds::FREEZING,
+            EnchantmentIds::TELEPORTATION,
+            EnchantmentIds::TIMESTOPPER];
+        foreach ($ids as $id)
+        foreach ($enchantments as $enchantment) {
+            Utils::createEnchantment($enchantment, $id);
+        }
+
+    }
+
     /**
-     * Executes a command on the command sender's behalf.
-     * @param CommandSender $sender The sender of the command.
-     * @param Command $command The command that was executed.
-     * @param string $label The alias or label used to execute the command.
-     * @param array $args An array of arguments passed to the command.
-     * @return bool
-     */
+    * Executes a command on the command sender's behalf.
+    * @param CommandSender $sender The sender of the command.
+    * @param Command $command The command that was executed.
+    * @param string $label The alias or label used to execute the command.
+    * @param array $args An array of arguments passed to the command.
+    * @return bool
+    */
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
         switch ($command->getName()) {
             case "customitems":
@@ -36,19 +56,22 @@ class CustomItem extends PluginBase {
         }
         return true;
     }
-    
+
     private function runEvents(): void {
-        $this->callEvent("FrezzingSword");
+        $this->callEvent("WeaponsEvents");
         $this->callEvent("TeleportationSword");
         $this->callEvent("TimeController");
     }
     /**
-     * Call a custom event dynamically based on the event name.
-     * @param string $eventName The name of the event to call.
-     */
+    * Call a custom event dynamically based on the event name.
+    * @param string $eventName The name of the event to call.
+    */
     private function callEvent(string $eventName): void {
         $eventClass = "\\AmitxD\\CustomItem\\Events\\" . $eventName;
         $eventListener = new $eventClass($this);
         $this->getServer()->getPluginManager()->registerEvents($eventListener, $this);
+    }
+    public static function getInstance(): self {
+        return self::$instance;
     }
 }
