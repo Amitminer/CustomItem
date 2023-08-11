@@ -13,6 +13,7 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\world\World;
 use pocketmine\math\Vector3;
 use pocketmine\scheduler\ClosureTask;
+use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\server\CommandEvent;
 use AmitxD\CustomItem\CustomItem;
 
@@ -75,14 +76,14 @@ class TimeController implements Listener {
         $player->setMotion(new Vector3(0, 0, 0));
         $player->setNoClientPredictions(true);
         $player->sendMessage("§cYoure frezzz now for 30sec!");
-        $this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function () use ($player,$user) {
-            $this->unfreezePlayer($player,$user);
+        $this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function () use ($player, $user) {
+            $this->unfreezePlayer($player, $user);
         }), $duration * 20);
     }
 
     private function unfreezePlayer(Player $player, Player $user): void {
         unset($this->frozenPlayers[$player->getName()]);
-        if($user->isOnline()){
+        if ($user->isOnline()) {
             $user->sendMessage("§aResumed the time!");
         }
         $user->getWorld()->startTime();
