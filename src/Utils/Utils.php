@@ -44,8 +44,7 @@ class Utils {
     }
 
     public static function createEnchantment(string $name, int $id): void {
-        // i want to pass 
-        if (!empty($name)) {
+        if ($name !== '') {
             EnchantmentIdMap::getInstance()->register($id, new Enchantment(strtolower($name), 1, ItemFlags::ALL, ItemFlags::NONE, 1));
         }
     }

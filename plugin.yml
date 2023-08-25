@@ -1,6 +1,6 @@
 ---
 name: CustomItem 
-version: 3.0.0
+version: 4.0.0
 main: AmitxD\CustomItem\CustomItem
 api: 5.0.0
 src-namespace-prefix: AmitxD\CustomItem

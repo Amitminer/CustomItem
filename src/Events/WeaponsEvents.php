@@ -28,21 +28,16 @@ class WeaponsEvents implements Listener {
 
     private $frozenPlayers = [];
 
-    public function __construct(CustomItem $plugin) {
+    public function __construct(private CustomItem $plugin) {
         $this->plugin = $plugin;
     }
 
     public function onEntityDamage(EntityDamageByEntityEvent $event): void {
         $damager = $event->getDamager();
-        if (!$this->isPlayer($damager)) {
-            return;
-        }
-
         $entity = $event->getEntity();
-        if (!$this->isPlayer($entity)) {
+        if (!$damager instanceof Player || !$entity instanceof Player) {
             return;
         }
-
         $item = $damager->getInventory()->getItemInHand();
 
         if ($this->isFreezingSword($item)) {
@@ -53,32 +48,32 @@ class WeaponsEvents implements Listener {
     }
 
     private function handleFreezingSword(Player $damager, Player $entity, Item $item): void {
-        if (TimerAPI::hasCooldown($damager)) {
-            $timeRemaining = TimerAPI::getCooldownTimeRemaining($damager);
+        if (TimerAPI::hasCooldown($damager, $item)) {
+            $timeRemaining = TimerAPI::getCooldownTimeRemaining($damager, $item);
             $damager->sendMessage("§r[§dOMNI§bCRAFT§r] §c>>§r §cThe Freezing Sword is on cooldown for {$timeRemaining} seconds.");
             return;
         }
 
         $playerName = $entity->getName();
         $this->freezePlayer($entity, 5);
-        TimerAPI::startCooldown($damager, 15);
+        TimerAPI::startCooldown($damager, 15, $item);
         $damager->sendMessage("§r[§dOMNI§bCRAFT§r] §c>>§r §b{$playerName} has been frozen for 5 seconds!");
     }
 
     private function handleLightningSword(Player $damager, Player $entity, Item $item): void {
-        if (TimerAPI::hasCooldown($damager)) {
-            $timeRemaining = TimerAPI::getCooldownTimeRemaining($damager);
+        if (TimerAPI::hasCooldown($damager, $item)) {
+            $timeRemaining = TimerAPI::getCooldownTimeRemaining($damager, $item);
             $damager->sendMessage("§r[§dOMNI§bCRAFT§r] §c>>§r §cThe Lightning Sword is on cooldown for {$timeRemaining} seconds.");
             return;
         }
 
         $this->summonLightning($entity);
-        TimerAPI::startCooldown($damager, 15);
+        TimerAPI::startCooldown($damager, 15, $item);
     }
 
     public function isFreezingSword(Item $item): bool {
         $FreezingNameTag = $item->getNamedTag()->getTag("FreezingSword");
-        if ($item->getTypeId() === ItemTypeIds::DIAMOND_SWORD && $FreezingNameTag) {
+        if ($item->getTypeId() === ItemTypeIds::DIAMOND_SWORD && $FreezingNameTag !== null) {
             return true;
         }
         return false;
@@ -86,17 +81,13 @@ class WeaponsEvents implements Listener {
 
     public function isLightningSword(Item $item): bool {
         $LightningNameTag = $item->getNamedTag()->getTag("LightningSword");
-        if ($item->getTypeId() === ItemTypeIds::GOLDEN_SWORD && $LightningNameTag) {
+        if ($item->getTypeId() === ItemTypeIds::GOLDEN_SWORD && $LightningNameTag !== null) {
             return true;
         }
         return false;
     }
 
-    private function isPlayer($entity): bool {
-        return $entity instanceof Player;
-    }
-
-    public function summonLightning(Player $player) :void{
+    public function summonLightning(Player $player) :void {
         $pos = $player->getPosition();
         $light = new AddActorPacket();
         $light->actorUniqueId = Entity::nextRuntimeId();
@@ -105,8 +96,8 @@ class WeaponsEvents implements Listener {
         $light->type = "minecraft:lightning_bolt";
         $light->yaw = $player->getLocation()->getYaw();
         $light->syncedProperties = new PropertySyncData([], []);
-		$sound = PlaySoundPacket::create("ambient.weather.thunder", $pos->getX(), $pos->getY(), $pos->getZ(), 1, 1);
-		NetworkBroadcastUtils::broadcastPackets($player->getWorld()->getPlayers(), [$light, $sound]);
+        $sound = PlaySoundPacket::create("ambient.weather.thunder", $pos->getX(), $pos->getY(), $pos->getZ(), 1, 1);
+        NetworkBroadcastUtils::broadcastPackets($player->getWorld()->getPlayers(), [$light, $sound]);
     }
 
     private function freezePlayer(Player $player, int $duration): void {

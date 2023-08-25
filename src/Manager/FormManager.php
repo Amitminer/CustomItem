@@ -6,7 +6,7 @@ namespace AmitxD\CustomItem\Manager;
 
 use AmitxD\CustomItem\Manager\CustomItemsManager;
 use pocketmine\player\Player;
-use jojoe77777\FormAPI\SimpleForm;
+use AmitxD\CustomItem\libs\FormAPI\SimpleForm;
 
 class FormManager {
 
@@ -33,6 +33,9 @@ class FormManager {
                     CustomItemsManager::getTimeController($player);
                     break;
                 case 3:
+                    CustomItemsManager::getLightning($player);
+                    break;
+                case 4:
                     break;
             }
         });
@@ -41,6 +44,7 @@ class FormManager {
         $form->addButton("§bFrezzing Sword");
         $form->addButton("§cTELEPORTATION Sword");
         $form->addButton("§cTime-Controller");
+        $form->addButton("§bLightning Sword");
         $form->addButton("TODO:");
         $player->sendForm($form);
     }

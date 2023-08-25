@@ -9,6 +9,7 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\data\bedrock\EnchantmentIdMap;
 use AmitxD\CustomItem\Utils\EnchantmentsIds;
 use pocketmine\item\Item;
+use InvalidArgumentException;
 
 class ItemManager {
 
@@ -53,24 +54,28 @@ class ItemManager {
     }
 
     /**
-    * Add an enchantment to the item.
-    * @param string $enchantment The name of the enchantment to add.
+    * Adds an enchantment to the item.
+    *
+    * @param string|int $enchantment The name or ID of the enchantment to add.
     * @param int $level The level of the enchantment (default: 1).
+    *
+    * @throws InvalidArgumentException If the enchantment cannot be added.
+    *
     * @return ItemManager
     */
     public function setEnchantment(mixed $enchantment, int $level = 1): self {
-        if (is_string($enchantment)) {
-            $enchant = Utils::stringToEnchantment($enchantment);
-        } elseif (is_int($enchantment)) {
+        if (is_numeric($enchantment)) {
             $enchant = EnchantmentIdMap::getInstance()->fromId($enchantment);
         } else {
-            throw new \InvalidArgumentException("An error occurred while adding enchantment on item.");
+            $enchant = Utils::stringToEnchantment($enchantment);
         }
 
-        if ($enchant !== null) {
-            $enchantmentInstance = new EnchantmentInstance($enchant, $level);
-            $this->item->addEnchantment($enchantmentInstance);
+        if ($enchant === null) {
+            throw new InvalidArgumentException("An error occurred while adding an enchantment to the item.");
         }
+
+        $enchantmentInstance = new EnchantmentInstance($enchant, $level);
+        $this->item->addEnchantment($enchantmentInstance);
 
         return $this;
     }
