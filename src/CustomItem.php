@@ -29,10 +29,10 @@ class CustomItem extends PluginBase {
     public function registerEnchantments(): void {
         $enchantments = ["Teleportation",
             "Freezing",
-            "TimeStopper"];
+            "TimeStopper","Lightning"];
         $ids = [EnchantmentIds::FREEZING,
             EnchantmentIds::TELEPORTATION,
-            EnchantmentIds::TIMESTOPPER];
+            EnchantmentIds::TIMESTOPPER, EnchantmentIds::LIGHTNING];
         foreach ($ids as $id)
         foreach ($enchantments as $enchantment) {
             Utils::createEnchantment($enchantment, $id);
