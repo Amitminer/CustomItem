@@ -10,29 +10,56 @@ use pocketmine\command\CommandSender;
 use AmitxD\CustomItem\Manager\FormManager;
 use AmitxD\CustomItem\Utils\Utils;
 use AmitxD\CustomItem\Utils\EnchantmentIds;
+use AmitxD\CustomItem\Items\CustomItems;
+use pocketmine\player\Player;
+use Symfony\Component\Filesystem\Path;
+use pocketmine\resourcepacks\ZippedResourcePack;
+use customiesdevs\customies\Customies;
 
 class CustomItem extends PluginBase {
-    
+
     protected static $instance;
 
-    public function onLoad(): void {
+    protected function onLoad(): void {
         self::$instance = $this;
         $this->getLogger()->info("§aEnabled CustomItem!");
     }
 
-    public function onEnable(): void {
-        // $this->saveDefaultConfig();
+    protected function onEnable(): void {
+        $this->checkDependencies();
+        $this->loadResources();
         $this->registerEnchantments();
         $this->runEvents();
+    }
+
+    private function checkDependencies(): void {
+        if (class_exists(Customies::class)) {
+            /** @phpstan-ignore-next-line */
+            CustomItems::loadItems();
+        } else {
+            $this->getLogger()->error("Customies plugin not found. Make sure the Customies is installed. You can download it from https://poggit.pmmp.io/p/Customies");
+            $this->getServer()->getPluginManager()->disablePlugin($this);
+            return;
+        }
+    }
+
+    private function loadResources(): void {
+        $this->saveResource("CustomItem.mcpack");
+        $rpManager = $this->getServer()->getResourcePackManager();
+        $rpManager->setResourceStack($rpManager->getResourceStack() + [new ZippedResourcePack(Path::join($this->getDataFolder(), "CustomItem.mcpack"))]);
+        ($serverForceResources = new \ReflectionProperty($rpManager, "serverForceResources"))->setAccessible(true);
+        $serverForceResources->setValue($rpManager, true);
     }
 
     public function registerEnchantments(): void {
         $enchantments = ["Teleportation",
             "Freezing",
-            "TimeStopper","Lightning"];
+            "TimeStopper",
+            "Lightning"];
         $ids = [EnchantmentIds::FREEZING,
             EnchantmentIds::TELEPORTATION,
-            EnchantmentIds::TIMESTOPPER, EnchantmentIds::LIGHTNING];
+            EnchantmentIds::TIMESTOPPER,
+            EnchantmentIds::LIGHTNING];
         foreach ($ids as $id)
         foreach ($enchantments as $enchantment) {
             Utils::createEnchantment($enchantment, $id);
@@ -49,6 +76,9 @@ class CustomItem extends PluginBase {
     * @return bool
     */
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
+        if(!$sender instanceof Player){
+            return false;
+        }
         switch ($command->getName()) {
             case "customitems":
                 FormManager::displayCustomItemsForm($sender);
@@ -56,6 +86,7 @@ class CustomItem extends PluginBase {
         }
         return true;
     }
+
 
     private function runEvents(): void {
         $this->callEvent("WeaponsEvents");

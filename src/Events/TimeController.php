@@ -22,8 +22,8 @@ class TimeController implements Listener {
 
     private $frozenPlayers = [];
 
-    public function __construct(private CustomItem $plugin) {
-        $this->plugin = $plugin;
+    public function __construct() {
+        // NOOP
     }
 
     public function onPlayerItemUse(PlayerItemUseEvent $event): void {

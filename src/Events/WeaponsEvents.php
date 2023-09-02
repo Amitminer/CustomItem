@@ -28,8 +28,8 @@ class WeaponsEvents implements Listener {
 
     private $frozenPlayers = [];
 
-    public function __construct(private CustomItem $plugin) {
-        $this->plugin = $plugin;
+    public function __construct() {
+        // NOOP
     }
 
     public function onEntityDamage(EntityDamageByEntityEvent $event): void {
@@ -73,7 +73,7 @@ class WeaponsEvents implements Listener {
 
     public function isFreezingSword(Item $item): bool {
         $FreezingNameTag = $item->getNamedTag()->getTag("FreezingSword");
-        if ($item->getTypeId() === ItemTypeIds::DIAMOND_SWORD && $FreezingNameTag !== null) {
+        if ($FreezingNameTag !== null) {
             return true;
         }
         return false;
@@ -81,7 +81,7 @@ class WeaponsEvents implements Listener {
 
     public function isLightningSword(Item $item): bool {
         $LightningNameTag = $item->getNamedTag()->getTag("LightningSword");
-        if ($item->getTypeId() === ItemTypeIds::GOLDEN_SWORD && $LightningNameTag !== null) {
+        if ($LightningNameTag !== null) {
             return true;
         }
         return false;

@@ -19,15 +19,15 @@ use AmitxD\CustomItem\CustomItem;
 
 class TeleportationSword implements Listener {
     
-    public function __construct(private CustomItem $plugin) {
-        $this->plugin = $plugin;
+    public function __construct() {
+        // NOOP
     }
     
     public function onPlayerItemUse(PlayerItemUseEvent $event): void {
         $player = $event->getPlayer();
         $item = $event->getItem();
         $CheckNamedTag = $item->getNamedTag()->getTag("TP-Sword");
-        if ($item->getTypeId() === ItemTypeIds::NETHERITE_SWORD && $CheckNamedTag !== null && $this->isPlayer($player)) {
+        if ($CheckNamedTag !== null && $this->isPlayer($player)) {
             if(TimerAPI::hasCooldown($player,$item)){
                 $timeRemaining = TimerAPI::getCooldownTimeRemaining($player,$item);
                 $player->sendMessage("§r[§dOMNI§bCRAFT§r] §c>>§r §cThe TeleportationSword is on cooldown for {$timeRemaining} seconds.");
