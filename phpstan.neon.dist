@@ -1,8 +1,8 @@
 parameters:
     level: 4
-    ignoreErrors:
-        - '#Property .+ is never read, only written.#'
     paths:
         - src
     scanDirectories:
         - vendor
+    excludePaths:
+        - src/Items

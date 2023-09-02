@@ -20,7 +20,7 @@ class CustomItemsManager {
     * @param mixed $player The player to whom the item will be given.
     */
     public static function getFrezzing($player): void {
-        $item = ItemManager::getCustomItem("diamond_sword");
+        $item = ItemManager::getCustomItem("customitem:freezing_sword");
         $item->setName("§r§b§lFREEZING SWORD");
         $item->setLore(["§aFreezz Players for 5 Seconds!", "\n§cCooldown: 15 Seconds\n§r§l§9RARE"]);;
         $item->setEnchantment(EnchantmentIds::FREEZING, 1);
@@ -34,7 +34,7 @@ class CustomItemsManager {
     * @param mixed $player The player to whom the item will be given.
     */
     public static function getTeleportationSword($player): void {
-        $item = ItemManager::getCustomItem("netherite_sword");
+        $item = ItemManager::getCustomItem("customitem:teleportation_sword");
         $item->setName("§r§eTeleportation-Sword");
         $item->setLore(["§r§bRight Click To Teleport.\n\n§r§9RARE"]);
         $item->setEnchantment(EnchantmentIds::TELEPORTATION, 1);
@@ -57,7 +57,7 @@ class CustomItemsManager {
     }
 
     public static function getLightning($player): void {
-        $item = ItemManager::getCustomItem("gold_sword");
+        $item = ItemManager::getCustomItem("customitem:lightning_sword");
         $item->setName("§r§b§lLIGHTNING-SWORD");
         $item->setLore([
             "§eUnleash lightning on foes!",
