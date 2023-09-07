@@ -35,7 +35,6 @@ class FreezingSword extends TieredTool implements ItemComponents {
 	}
 
 	public function onAttackEntity(Entity $victim, array &$returnedItems) : bool{
-	    $victim->sendMessage("used sword");
 		return $this->applyDamage(1);
 	}
 }
