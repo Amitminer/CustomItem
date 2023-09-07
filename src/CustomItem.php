@@ -16,7 +16,7 @@ use Symfony\Component\Filesystem\Path;
 use pocketmine\resourcepacks\ZippedResourcePack;
 use customiesdevs\customies\Customies;
 
-class CustomItem extends PluginBase {
+class CustomItem extends PluginBase{
 
     protected static $instance;
 
@@ -76,7 +76,7 @@ class CustomItem extends PluginBase {
     * @return bool
     */
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
-        if(!$sender instanceof Player){
+        if (!$sender instanceof Player) {
             return false;
         }
         switch ($command->getName()) {
@@ -89,8 +89,8 @@ class CustomItem extends PluginBase {
 
 
     private function runEvents(): void {
-        $this->callEvent("WeaponsEvents");
-        $this->callEvent("TeleportationSword");
+     //   $this->callEvent("WeaponsEvents");
+      //  $this->callEvent("TeleportationSword");
         $this->callEvent("TimeController");
     }
     /**
