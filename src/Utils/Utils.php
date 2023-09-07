@@ -4,7 +4,9 @@ declare(strict_types = 1);
 
 namespace AmitxD\CustomItem\Utils;
 
+use pocketmine\player\Player;
 use pocketmine\item\Item;
+use pocketmine\entity\Entity;
 use pocketmine\item\enchantment\StringToEnchantmentParser;
 use pocketmine\data\bedrock\EnchantmentIdMap;
 use pocketmine\item\enchantment\ItemFlags;
@@ -13,6 +15,10 @@ use pocketmine\item\LegacyStringToItemParser;
 use pocketmine\item\LegacyStringToItemParserException;
 use pocketmine\item\StringToItemParser;
 use AmitxD\CustomItem\Utils\EnchantmentIds;
+use pocketmine\network\mcpe\protocol\types\entity\PropertySyncData;
+use pocketmine\network\mcpe\protocol\PlaySoundPacket;
+use pocketmine\network\mcpe\protocol\AddActorPacket;
+use pocketmine\network\mcpe\NetworkBroadcastUtils;
 
 class Utils {
 
@@ -48,4 +54,18 @@ class Utils {
             EnchantmentIdMap::getInstance()->register($id, new Enchantment(strtolower($name), 1, ItemFlags::ALL, ItemFlags::NONE, 1));
         }
     }
+    
+    public static function summonLightning(Player $player) :void {
+        $pos = $player->getPosition();
+        $light = new AddActorPacket();
+        $light->actorUniqueId = Entity::nextRuntimeId();
+        $light->actorRuntimeId = 1;
+        $light->position = $player->getPosition()->asVector3();
+        $light->type = "minecraft:lightning_bolt";
+        $light->yaw = $player->getLocation()->getYaw();
+        $light->syncedProperties = new PropertySyncData([], []);
+        $sound = PlaySoundPacket::create("ambient.weather.thunder", $pos->getX(), $pos->getY(), $pos->getZ(), 1, 1);
+        NetworkBroadcastUtils::broadcastPackets($player->getWorld()->getPlayers(), [$light, $sound]);
+    }
+    
 }
