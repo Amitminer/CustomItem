@@ -13,7 +13,7 @@ The **Teleportation-Sword** is an enigmatic tool that grants the wielder the abi
 ### Time Controller
 The **Time Controller** is a fascinating device that allows players to manipulate the time in their world. With a mere right-click, players can toggle between day and night or even accelerate or slow down the time. This item is a true gem for creative servers or anyone looking to have more control over their world.
 
-### Lightning Sword (New!)
+### Lightning Sword
 The **Lightning Sword** is a powerful weapon that unleashes lightning bolts upon hitting a player. It electrifies the battlefield with its shocking ability, making it a formidable choice for those who enjoy intense combat scenarios. Be careful, as the power of lightning comes with a cooldown to ensure a fair and strategic gameplay experience.
 
 ## Todo
