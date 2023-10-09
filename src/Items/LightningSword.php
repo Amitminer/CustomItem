@@ -39,9 +39,6 @@ class LightningSword extends TieredTool implements ItemComponents {
     }
 
     public function onAttackEntity(Entity $victim, array &$returnedItems) : bool {
-        if (!$this->isPlayer($victim)) {
-            return false;
-        }
         $lastDamageCause = $victim->getLastDamageCause();
         if ($lastDamageCause instanceof EntityDamage) {
             $damager = $lastDamageCause->getDamager();
