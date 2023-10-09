@@ -46,11 +46,10 @@ class CustomItem extends PluginBase{
     private function loadResources(): void {
         $this->saveResource("CustomItem.mcpack");
         $rpManager = $this->getServer()->getResourcePackManager();
-        $rpManager->setResourceStack($rpManager->getResourceStack() + [new ZippedResourcePack(Path::join($this->getDataFolder(), "CustomItem.mcpack"))]);
-        ($serverForceResources = new \ReflectionProperty($rpManager, "serverForceResources"))->setAccessible(true);
-        $serverForceResources->setValue($rpManager, true);
+		$rpManager->setResourceStack(array_merge($rpManager->getResourceStack(), [new ZippedResourcePack(Path::join($this->getDataFolder(), "CustomItem.mcpack"))]));
+		(new \ReflectionProperty($rpManager, "serverForceResources"))->setValue($rpManager, true);
     }
-
+        
     public function registerEnchantments(): void {
         $enchantments = ["Teleportation",
             "Freezing",
