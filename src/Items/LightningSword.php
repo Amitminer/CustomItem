@@ -49,7 +49,7 @@ class LightningSword extends TieredTool implements ItemComponents {
         return parent::onAttackEntity($victim, $returnedItems);
     }
 
-    private function handleLightningSword(Player $damager, Player $entity, Item $item): void {
+    private function handleLightningSword(Player $damager, Entity $entity, Item $item): void {
         if (TimerAPI::hasCooldown($damager, $item)) {
             $timeRemaining = TimerAPI::getCooldownTimeRemaining($damager, $item);
             $damager->sendMessage("§r[§dOMNI§bCRAFT§r] §c>>§r §cThe Lightning Sword is on cooldown for {$timeRemaining} seconds.");
